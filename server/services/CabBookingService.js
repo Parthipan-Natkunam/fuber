@@ -1,6 +1,6 @@
 const cabs = require('../inMemData/cabData');
 
-class CabBookingService(){
+class CabBookingService{
 	findCab(userBookingObj){
 		let nearestCab = void 0;
 		let prevDistance = void 0;
