@@ -1,0 +1,27 @@
+{
+  "name": "fuberapi",
+  "version": "1.0.0",
+  "description": "A POC for Quintype Hiring Challenge",
+  "main": "server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "express": "4.16.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node tests.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Parthipan-Natkunam/fuber.git"
+  },
+  "author": "Parthipan Natkunam <devparthikunam@gmail.com> (http://parthipan.co.in/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Parthipan-Natkunam/fuber/issues"
+  },
+  "homepage": "https://github.com/Parthipan-Natkunam/fuber#readme"
+}
