@@ -1,0 +1,5 @@
+1. each cab record should have the following fields:
+id, location {lat,long}, color, isAvailable, hasPickedupCustomer, isWaiting
+
+2. Each ride should be an object with the following properties:
+id,cabId, customerId, pickupLoc{lat,long}, dropLoc{lat,long}, waitingTime, wasCancelled
