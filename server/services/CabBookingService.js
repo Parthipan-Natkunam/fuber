@@ -10,7 +10,8 @@ class CabBookingService{
 			let latDistance = Math.abs(userLoc[0]-cabLoc[0]);
 			let longDistance = Math.abs(userLoc[1]-cabLoc[1]);
 			let newDistance = +Math.sqrt((latDistance**2)+(longDistance**2)).toFixed(2);
-			if(typeof prevDistance === 'undefined' || newDistance < prevDistance ){
+			if((typeof prevDistance === 'undefined' || newDistance < prevDistance) && 
+				(userBookingObj.prefCol==="" || userBookingObj.prefCol === cab.color)){
 				prevDistance = newDistance;
 				nearestCab = cab.id;
 			}

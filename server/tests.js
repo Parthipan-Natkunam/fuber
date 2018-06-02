@@ -19,8 +19,12 @@ assert(findCabTest.findNearestCab(userObj2) === 1);
 
 /*find nearest pink cab*/
 const pinkUserObj1 = {id: 1,loc:{lat: 4,long: 3.6},prefCol: "pink"};
-const pinkUserObj1 = {id: 1,loc:{lat: 3,long: -0.6},prefCol: "pink"};
+const pinkUserObj2 = {id: 1,loc:{lat: 2.6,long: 3},prefCol: "pink"};
+const pinkUserObj3 = {id: 1,loc:{lat: 0.5,long: 0.5},prefCol: "pink"};
 
+assert(findCabTest.findNearestCab(pinkUserObj1) === 5);
+assert(findCabTest.findNearestCab(pinkUserObj2) === 3);
+assert(findCabTest.findNearestCab(pinkUserObj3) === 3);
 
 
 console.log("All Tests Passed.")
