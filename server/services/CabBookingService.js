@@ -47,18 +47,20 @@ class CabBookingService{
 		return rideObj;
 	}
 	cancelBooking(rideId){
-		let rideObj = _.findWhere(rides,(ride)=>{ return ride.id === rideId});
-		let cabToCancel = cabs[rideObj.cabIndex];
+		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
 		let result = 0;
-		if(!cabToCancel.isWaiting && !cabToCancel.hasPickedupCustomer && !_.isEmpty(rideObj)){
-			cabToCancel.isAvailable = true;	
-			rideObj.wasCancelled = true; // for future data analysis if required assuming the  Prod will have a datastore for ride records.
-			result = 1;
+		if(!_.isEmpty(rideObj)){
+			let cabToCancel = cabs[rideObj.cabIndex];
+			if(!cabToCancel.isWaiting && !cabToCancel.hasPickedupCustomer && !_.isEmpty(rideObj)){
+				cabToCancel.isAvailable = true;	
+				rideObj.wasCancelled = true; // for future data analysis if required assuming the  Prod will have a datastore for ride records.
+				result = 1;
+			}
 		}
 		return result;
 	}
 	beginWait(rideId){
-		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
+		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
 		if(!_.isEmpty(rideObj)){
 			rideObj.waitStartTime = new Date().getTime();
 			cabs[rideObj.cabIndex].isWaiting = true;
@@ -88,7 +90,7 @@ class CabBookingService{
 		return {total:totalCost,travelCost:travelCost,waitingCost:waitingCost,pinkFactor:additionalPinkCost};
 	}
 	beginRide(rideId){
-		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
+		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
 		if(!_.isEmpty(rideObj)){
 			let cabObj = cabs[rideObj.cabIndex];
 			if(cabObj && cabObj.isWaiting){
@@ -101,7 +103,7 @@ class CabBookingService{
 		return 0;
 	}
 	endRide(rideId){
-		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
+		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
 		if(!_.isEmpty(rideObj)){
 			let cabObj = cabs[rideObj.cabIndex];
 			var isDifferentLocs = (rideObj.userLoc[0] !== rideObj.dropLoc[0]) && (rideObj.userLoc[1] !== rideObj.dropLoc[1]);

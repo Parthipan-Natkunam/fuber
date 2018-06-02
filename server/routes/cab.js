@@ -11,8 +11,12 @@ router.get('/',(req,res)=>{
     res.send(cabServices.getAllCabData(false));    
 });
 
-router.get('/:showAll',(req,res)=>{ // route for debugging and testing purpose
+/*router.get('/:showAll',(req,res)=>{ // route for debugging and testing purpose
     res.send(cabServices.getAllCabData(true));
+});*/
+
+router.get('/allRides',(req,res)=>{ //route for testing and debugging purpose
+    res.send(cabServices.getAllRidesData());    
 });
 
 router.post('/bookCab',(req,res)=>{
