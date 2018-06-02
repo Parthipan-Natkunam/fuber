@@ -81,3 +81,8 @@ requests.
     ]
 }
 ```
+
+### Assumptions made:
+1. The cab cannot be cancelled once it has started waiting for the client or the ride is started.
+2. Can be cancelled before any of the above happens.
+3. All the distance unit is assumed to be in Km by default.
