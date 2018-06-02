@@ -17,16 +17,21 @@ class CabBookingService{
 	findCab(userBookingObj){
 		let nearestCabObj = void 0;
 		let prevDistance = void 0;
-		let userLoc = [userBookingObj.loc.lat,userBookingObj.loc.long];
-		cabs.forEach((cab,index)=>{
-			let newDistance = CalculateDistance(userLoc,cab.location);
-			if((typeof prevDistance === 'undefined' || newDistance < prevDistance) && 
-			(userBookingObj.prefCol==="any" || userBookingObj.prefCol === cab.color) &&
-			cab.isAvailable){
-				prevDistance = newDistance;
-				nearestCabObj = {cabId:cab.id,cabIndex:index};
-			}
-		});
+		var isDifferentLocs = (userBookingObj.loc.lat !==userBookingObj.dropLoc.lat) || (userBookingObj.loc.long !== userBookingObj.dropLoc.long);
+		if(isDifferentLocs){
+			let userLoc = [userBookingObj.loc.lat,userBookingObj.loc.long];
+			cabs.forEach((cab,index)=>{
+				let newDistance = CalculateDistance(userLoc,cab.location);
+				if((typeof prevDistance === 'undefined' || newDistance < prevDistance) && 
+				(userBookingObj.prefCol==="any" || userBookingObj.prefCol === cab.color) &&
+				cab.isAvailable){
+					prevDistance = newDistance;
+					nearestCabObj = {cabId:cab.id,cabIndex:index};
+				}
+			});
+		}else{
+			return "E01:Same_Loc";
+		}
 		return nearestCabObj;
 	}
 	bookCab(nearestCabObj,userBookingObj){
@@ -49,7 +54,8 @@ class CabBookingService{
 	cancelBooking(rideId){
 		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
 		let result = 0;
-		if(!_.isEmpty(rideObj)){
+		if(!_.isEmpty(rideObj) && typeof rideObj.wasCancelled === 'undefined'
+		 && typeof rideObj.isComplete === "undefined"){
 			let cabToCancel = cabs[rideObj.cabIndex];
 			if(!cabToCancel.isWaiting && !cabToCancel.hasPickedupCustomer && !_.isEmpty(rideObj)){
 				cabToCancel.isAvailable = true;	
@@ -61,10 +67,15 @@ class CabBookingService{
 	}
 	beginWait(rideId){
 		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
-		if(!_.isEmpty(rideObj)){
-			rideObj.waitStartTime = new Date().getTime();
-			cabs[rideObj.cabIndex].isWaiting = true;
-			return 1;
+		if(!_.isEmpty(rideObj) && typeof rideObj.wasCancelled === 'undefined'
+		 && typeof rideObj.isComplete === "undefined"){
+			if(!cabs[rideObj.cabIndex].isWaiting){
+				rideObj.waitStartTime = new Date().getTime();
+				cabs[rideObj.cabIndex].isWaiting = true;
+				return 1;
+			}else{
+				return 2;
+			}
 		}
 		return 0;	
 	}
@@ -76,6 +87,7 @@ class CabBookingService{
 		let waitingCost = 0;
 		let travelCost = 0;
 		let totalCost = 0;
+		let invoiceData = void 0;
 		if(typeof rideObj.waitEndTime !== 'undefined'){
 			let waitDelta = rideObj.waitEndTime - rideObj.waitStartTime;
 			let waitSec = Math.floor(waitDelta/1000); //since delta is im ms
@@ -84,34 +96,41 @@ class CabBookingService{
 		}
 		travelCost = (totalDistanceTravelled*perKmCost) //assuming the distance is in Km already
 		totalCost = travelCost + waitingCost;
+		invoiceData = {total:totalCost,travelCost:travelCost,waitingCost:waitingCost,pinkFactor: 0};
 		if(cabs[rideObj.cabIndex].color === "pink"){
 				totalCost += additionalPinkCost;
+				invoiceData = {total:totalCost,travelCost:travelCost,waitingCost:waitingCost,pinkFactor:additionalPinkCost};
 		}
-		return {total:totalCost,travelCost:travelCost,waitingCost:waitingCost,pinkFactor:additionalPinkCost};
+		return invoiceData;
 	}
 	beginRide(rideId){
 		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
-		if(!_.isEmpty(rideObj)){
+		if(!_.isEmpty(rideObj) && typeof rideObj.wasCancelled === 'undefined'
+		 && typeof rideObj.isComplete === "undefined"){
 			let cabObj = cabs[rideObj.cabIndex];
-			if(cabObj && cabObj.isWaiting){
+			if(!cabObj.hasPickedupCustomer){
+				if(cabObj && cabObj.isWaiting){
 				rideObj.waitEndTime = new Date().getTime();
 				cabObj.isWaiting = false;	
-			} 
-			cabObj.hasPickedupCustomer = true;
-			return 1;
+				} 
+				cabObj.hasPickedupCustomer = true;
+				return 1;
+			}else{
+				return 2;
+			}
 		}
 		return 0;
 	}
 	endRide(rideId){
 		let rideObj = _.filter(rides,(ride)=>{return ride.id === rideId})[0];
-		if(!_.isEmpty(rideObj)){
+		if(!_.isEmpty(rideObj) && typeof rideObj.wasCancelled === 'undefined'
+		 && typeof rideObj.isComplete === "undefined"){
 			let cabObj = cabs[rideObj.cabIndex];
-			var isDifferentLocs = (rideObj.userLoc[0] !== rideObj.dropLoc[0]) && (rideObj.userLoc[1] !== rideObj.dropLoc[1]);
-			if(cabObj && !cabObj.isWaiting && 
-			cabObj.hasPickedupCustomer && isDifferentLocs){
+			if(cabObj && !cabObj.isWaiting && cabObj.hasPickedupCustomer){
 				cabObj.hasPickedupCustomer = true;
-				cabToCancel.isAvailable = true;
+				cabObj.isAvailable = true;
 				cabObj.location = rideObj.dropLoc;
+				rideObj.isComplete = true;
 				return rideObj;	
 			}		
 		}
@@ -119,7 +138,7 @@ class CabBookingService{
 	}
 	getAllCabData(canShowAll){
 		if(canShowAll) return cabs;
-		else{
+		else{ // added for testing and debugging purpose
 			return _.filter(cabs,(cab)=>{return cab.isAvailable === true});
 		}
 	}
