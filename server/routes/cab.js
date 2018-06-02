@@ -34,7 +34,7 @@ router.post('/cancelCab',(req,res)=>{
     }else{
     	let canceledRide = cabServices.cancelBooking(req.body.id);
     	if(canceledRide) res.send({success:"cancelled successfully"});
-    	else res.send({failure:"cannot be cancelled"});
+    	else res.send({error:"cannot be cancelled"});
     }
 });
 
@@ -48,7 +48,7 @@ router.post('/beginWait',(req,res)=>{
     		if(beginWait === 2) res.send({failure:"Already Waiting"});
     		else res.send({success:"Waiting time started"});
     	}
-    	else res.send({failure:"failed"});
+    	else res.send({error:"failed"});
     }
 });
 
@@ -62,7 +62,7 @@ router.post('/beginRide',(req,res)=>{
     		if(rideStatus === 2) res.send({failure:"ride has already begun"});
     		else res.send({success:"ride has begun"});
     	}
-    	else res.send({failure:"ride doesn't exist"});
+    	else res.send({error:"ride doesn't exist"});
     }
 });
 
