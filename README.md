@@ -45,3 +45,39 @@ requests.
 |/beginWait|post|id(rideId)|success or error property|
 |/beginRide|post|id(rideId)|success or error property|
 |/endRide|post|id(rideId)|total cost data for the ride or error |
+
+### Request, Response Sample:
+
+#### bookCab:
+##### request:
+```
+{
+	"id": 1,
+	"loc":{
+		"lat": 4,
+		"long": 3.6	
+	},
+	"dropLoc":{
+		"lat": 6,
+		"long": 7.6	
+	},
+	"prefCol": "any"	
+}
+```
+
+##### Response:
+```
+{
+    "id": 3,
+    "cabId": 5,
+    "cabIndex": 4,
+    "userLoc": [
+        4,
+        3.6
+    ],
+    "dropLoc": [
+        6,
+        7.6
+    ]
+}
+```
