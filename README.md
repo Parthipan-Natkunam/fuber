@@ -82,6 +82,23 @@ requests.
 }
 ```
 
+#### endRide
+##### Request:
+```
+{
+	"id":4
+}
+```
+##### Response:
+```
+{
+    "total": 8.94,
+    "travelCost": 8.94,
+    "waitingCost": 0,
+    "pinkFactor": 0
+}
+```
+
 ### Assumptions made:
 1. The cab cannot be cancelled once it has started waiting for the client or the ride is started.
 2. Can be cancelled before any of the above happens.
