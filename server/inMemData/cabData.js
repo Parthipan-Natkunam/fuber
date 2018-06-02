@@ -43,3 +43,5 @@ let cabData = [
 		"isWaiting": false
 	}
 ];
+
+module.exports = cabData;
