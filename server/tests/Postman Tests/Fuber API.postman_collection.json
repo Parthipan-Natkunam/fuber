@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "b945d2ad-a0bb-46ed-9c8e-7c1ab9b76a37",
+		"name": "Fuber API",
+		"description": "Documentation for the Fuber POC Hiring Challenge  assignment by QuinType",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:3000",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n\t\"loc\":{\n\t\t\"lat\": 4,\n\t\t\"long\": 3.6\n\t\t\n\t},\n\t\"dropLoc\":{\n\t\t\"lat\": 6,\n\t\t\"long\": 7.6\n\t\t\n\t},\n\t\"prefCol\": \"any\"\n\t\n}"
+				},
+				"url": {
+					"raw": "localhost:3000",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				},
+				"description": "API to fetch all available cabs.\nreturns an array of cab objects."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/bookCab",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n\t\"loc\":{\n\t\t\"lat\": 4,\n\t\t\"long\": 3.6\n\t\t\n\t},\n\t\"dropLoc\":{\n\t\t\"lat\": 6,\n\t\t\"long\": 7.6\n\t\t\n\t},\n\t\"prefCol\": \"any\"\n\t\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/bookCab",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bookCab"
+					]
+				},
+				"description": "API to book a cab.\nInternally finds the nearest cab and books it.\non Error, an error property will be prsent.\non success ride details will be returned\nwhen no cabs are availble a noCabs prop is returned"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/cancelCab",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":1\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/cancelCab",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cancelCab"
+					]
+				},
+				"description": "cancels the booked ride,\nrequest should have the ride id.\nresponse will have a success or error prop"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/beginWait",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":2\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/beginWait",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"beginWait"
+					]
+				},
+				"description": "API to initate cab waiting for customer.\nrequest should have ride id.\nresponse will have success or error prop"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/beginRide",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":2\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/beginRide",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"beginRide"
+					]
+				},
+				"description": "API to start a ride. \nrequest should have ride id.\nresponse will have a success or error prop."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/endRide",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":2\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/endRide",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"endRide"
+					]
+				},
+				"description": "API to complete the ride.\nrequires ride id.\non success will return a cost summary json.\nOn failure an error prop will be present"
+			},
+			"response": []
+		}
+	]
+}
