@@ -24,3 +24,24 @@ The testing and API interactions were done through postman with raw JSON type in
 <p align="center">
      <img src="/reameImg/distanceCalc.jpg" alt="distance calc"/> 
  </p>
+ 
+2. The entire operation is modelled as a service.
+3. Restful APIs consume the service to provide required response on request.
+4. Request validators have been put in place using ```JOI``` module for ```POST```
+requests.
+5. For maintaing a simplistic  POC approach, all data are held in memory.
+
+### Tech Stack:
+1. Node.js
+2. Express
+3. Postman (for API Testing)
+
+### API
+|Endpoint|type|request params|response|
+|--------|----|---------|------|
+|/|get|-|a list of available cab data|
+|/bookCab|post|id(userId),location,dropLocation,preferedColor|a ride object containing ride details or error|
+|/cancelCab|post|id(rideId)|success or error property|
+|/beginWait|post|id(rideId)|success or error property|
+|/beginRide|post|id(rideId)|success or error property|
+|/endRide|post|id(rideId)|total cost data for the ride or error |
