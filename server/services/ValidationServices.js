@@ -13,6 +13,10 @@ const userSchema = {
     prefCol: Joi.string().required()
 };
 
+const rideIdSchema = {
+	id: Joi.number().integer().required()
+};
+
 const validateUserObj = (obj) => {
     let {error} = Joi.validate(obj,userSchema);
     if(error){
@@ -20,4 +24,12 @@ const validateUserObj = (obj) => {
     }
 }
 
+const validateRideId = (obj) =>{
+	let {error} = Joi.validate(obj,rideIdSchema);
+    if(error){
+        return error;
+    }
+}
+
 module.exports.validateUserObj = validateUserObj;
+module.exports.validateRideId = validateRideId;

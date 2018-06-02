@@ -2,6 +2,7 @@ const express = require('express');
 const _ = require('underscore');
 const CabBookingService = require('../services/CabBookingService');
 const validateUserObj = require('../services/validationServices').validateUserObj;
+const validateRideId = require('../services/validationServices').validateRideId;
 
 const router = express.Router();
 const cabServices = new CabBookingService();
@@ -10,7 +11,7 @@ router.get('/',(req,res)=>{
     res.send(cabServices.getAllCabData(false));    
 });
 
-router.get('/:showAll',(req,res)=>{
+router.get('/:showAll',(req,res)=>{ // route for debugging and testing purpose
     res.send(cabServices.getAllCabData(true));
 });
 
@@ -29,6 +30,53 @@ router.post('/bookCab',(req,res)=>{
     }
 });
 
+router.post('/cancelCab',(req,res)=>{
+	let errorObj = validateRideId(req.body);
+	if(errorObj){
+        res.status(400).send({error: errorObj.details[0].message});
+    }else{
+    	let canceledRide = cabServices.cancelBooking(req.body.id);
+    	if(canceledRide) res.send({success:"cancelled successfully"});
+    	else res.send({failure:"cannot be cancelled"});
+    }
+});
+
+router.post('/beginWait',(req,res)=>{
+	let errorObj = validateRideId(req.body);
+	if(errorObj){
+        res.status(400).send({error: errorObj.details[0].message});
+    }else{
+    	let beginWait = cabServices.beginWait(req.body.id);
+    	if(beginWait) res.send({success:"Waiting time started"});
+    	else res.send({failure:"failed"});
+    }
+});
+
+router.post('/beginRide',(req,res)=>{
+	let errorObj = validateRideId(req.body);
+	if(errorObj){
+        res.status(400).send({error: errorObj.details[0].message});
+    }else{
+    	let hasRideBegan = cabServices.beginRide(req.body.id);
+    	if(hasRideBegan) res.send({success:"ride has begun"});
+    	else res.send({failure:"ride doesn't exist"});
+    }
+});
+
+router.post('/endRide',(req,res)=>{
+	let errorObj = validateRideId(req.body);
+	if(errorObj){
+        res.status(400).send({error: errorObj.details[0].message});
+    }else{
+    	let rideObj = cabServices.endRide(req.body.id);
+    	if(!_.isEmpty(rideObj)){
+    		let costSummary = cabServices.calculateFare(rideObj);
+    		res.send(costSummary);
+    	}else{
+    		res.send({error: "cannot end ride"});
+    	}
+    }
+});
 
 
 module.exports = router;

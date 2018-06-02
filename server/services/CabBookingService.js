@@ -47,8 +47,8 @@ class CabBookingService{
 		return rideObj;
 	}
 	cancelBooking(rideId){
+		let rideObj = _.findWhere(rides,(ride)=>{ return ride.id === rideId});
 		let cabToCancel = cabs[rideObj.cabIndex];
-		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
 		let result = 0;
 		if(!cabToCancel.isWaiting && !cabToCancel.hasPickedupCustomer && !_.isEmpty(rideObj)){
 			cabToCancel.isAvailable = true;	
@@ -59,9 +59,12 @@ class CabBookingService{
 	}
 	beginWait(rideId){
 		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
-		rideObj.waitStartTime = new Date().getTime();
-		cabs[rideObj.cabIndex].isWaiting = true;
-		return 1;
+		if(!_.isEmpty(rideObj)){
+			rideObj.waitStartTime = new Date().getTime();
+			cabs[rideObj.cabIndex].isWaiting = true;
+			return 1;
+		}
+		return 0;	
 	}
 	calculateFare(rideObj){
 		const perKmCost = 2; /*all cost related data should be in a config file in a sctual PROD system, placing here for convenience*/
@@ -69,6 +72,7 @@ class CabBookingService{
 		const additionalPinkCost = 5;
 		let totalDistanceTravelled = CalculateDistance(rideObj.userLoc,rideObj.dropLoc);
 		let waitingCost = 0;
+		let travelCost = 0;
 		let totalCost = 0;
 		if(typeof rideObj.waitEndTime !== 'undefined'){
 			let waitDelta = rideObj.waitEndTime - rideObj.waitStartTime;
@@ -76,26 +80,40 @@ class CabBookingService{
 			let waitInMins = Math.floor(waitSec/60);
 			waitingCost  = perMinWaitingCost*waitInMins; // adding this even though cost is 1 per minute, to support future changes in wait cost
 		}
-		totalCost = (totalDistanceTravelled*perKmCost)+waitingCost; //assuming the distance is in Km already
+		travelCost = (totalDistanceTravelled*perKmCost) //assuming the distance is in Km already
+		totalCost = travelCost + waitingCost;
 		if(cabs[rideObj.cabIndex].color === "pink"){
 				totalCost += additionalPinkCost;
 		}
-		return totalCost;
+		return {total:totalCost,travelCost:travelCost,waitingCost:waitingCost,pinkFactor:additionalPinkCost};
 	}
-	beginRide(rideObj){
-		var cabObj = cabs[rideObj.cabIndex];
-		if(cabObj.isWaiting){
-			rideObj.waitEndTime = new Date().getTime();
-			cabObj.isWaiting = false;	
-		} 
-		cabObj.hasPickedupCustomer = true;
-		return 1;
+	beginRide(rideId){
+		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
+		if(!_.isEmpty(rideObj)){
+			let cabObj = cabs[rideObj.cabIndex];
+			if(cabObj && cabObj.isWaiting){
+				rideObj.waitEndTime = new Date().getTime();
+				cabObj.isWaiting = false;	
+			} 
+			cabObj.hasPickedupCustomer = true;
+			return 1;
+		}
+		return 0;
 	}
-	endRide(rideObj){
-		var cabObj = cabs[rideObj.cabIndex];
-		cabObj.hasPickedupCustomer = true;
-		cabToCancel.isAvailable = true;
-		cabObj.location = rideObj.dropLoc;	
+	endRide(rideId){
+		let rideObj = _.findWhere(rides,(ride)=>{ride.id === rideId});
+		if(!_.isEmpty(rideObj)){
+			let cabObj = cabs[rideObj.cabIndex];
+			var isDifferentLocs = (rideObj.userLoc[0] !== rideObj.dropLoc[0]) && (rideObj.userLoc[1] !== rideObj.dropLoc[1]);
+			if(cabObj && !cabObj.isWaiting && 
+			cabObj.hasPickedupCustomer && isDifferentLocs){
+				cabObj.hasPickedupCustomer = true;
+				cabToCancel.isAvailable = true;
+				cabObj.location = rideObj.dropLoc;
+				return rideObj;	
+			}		
+		}
+		return void 0;
 	}
 	getAllCabData(canShowAll){
 		if(canShowAll) return cabs;
@@ -103,7 +121,7 @@ class CabBookingService{
 			return _.filter(cabs,(cab)=>{return cab.isAvailable === true});
 		}
 	}
-	getAllRides(){ //this service method is used for testing purpose only (debug rides array on Postman app)
+	getAllRidesData(){ //this service method is used for testing purpose only (debug rides array on Postman app)
 		return rides;
 	}
 }
