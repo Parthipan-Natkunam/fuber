@@ -9,8 +9,6 @@ To successfully run the project, it is advised to use node version ```8.11.2``` 
 ```cd fuber/server```<br/>
 ```npm install```
 
-<br/>
-
 2. To run the unit test <br/>
 ```npm test```<br/>
 The tests cases in the module assumes that all cabs are available at the start of the app. So it is advised to run this command first before running the app, if you are to run tests.<br/>
@@ -23,3 +21,6 @@ The testing and API interactions were done through postman with raw JSON type in
 
 ## Approach taken:
 1. The distance is calculated by using Pythogoras theorem to simplify for the purpose of POC.
+<p align="center">
+     <img src="/reameImg/distanceCalc.jpg" alt="distance calc"/> 
+ </p>
