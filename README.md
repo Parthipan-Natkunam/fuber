@@ -4,7 +4,7 @@ A POC prototype code for Quintype Hiring Challenge
     <img src="/reameImg/html.jpg" alt="screenshot"/>	
 </p>
 
-## Ebd of Ride Console Log:
+## End of Ride Console Log:
 <p align="center">
     <img src="/reameImg/console.jpg" alt="console log" />
 </p>
