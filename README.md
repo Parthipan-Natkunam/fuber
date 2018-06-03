@@ -1,5 +1,8 @@
 # fuber
 A POC prototype code for Quintype Hiring Challenge
+<p align="center">
+    <img src="/reameImg/html.jpg" alt="screenshot"/>	
+</p>
 
 ## Important Note:
 To successfully run the project, it is advised to use node version ```8.11.2``` or greater
