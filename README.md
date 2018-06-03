@@ -43,7 +43,8 @@ requests.
 ### Tech Stack:
 1. Node.js
 2. Express
-3. Postman (for API Testing)
+3. Jade (for server-side rendering of markup template)
+4. Postman (for API Testing)
 
 ### API
 |Endpoint|type|request params|response|
