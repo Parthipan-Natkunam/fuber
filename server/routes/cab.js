@@ -8,7 +8,10 @@ const router = express.Router();
 const cabServices = new CabBookingService();
 
 router.get('/',(req,res)=>{
-    res.send(cabServices.getAllCabData(false));    
+    let availableCabs = cabServices.getAllCabData(false);
+    res.render("availableCabs", {
+        resp: availableCabs
+    });    
 });
 
 router.post('/bookCab',(req,res)=>{

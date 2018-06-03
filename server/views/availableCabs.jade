@@ -1,0 +1,48 @@
+html
+	head
+		title Fuber
+		style(type='text/css').
+			body {
+				margin: 0;
+				padding: 0;
+				background: #000;
+				color:#fff;
+			}
+			#brand-name{
+				margin: 10px auto;
+				font-size: 80px;
+			}
+			#no-cab,#brand-name{
+				text-align: center;
+			}
+			.cab{
+				display: inline-block;
+				height: 200px;
+				width:200px;
+				margin: 10px;
+				padding: 10px;
+				background-color: #fff;
+				color: #000;
+				position:relative;
+			}
+			.pink-cab{
+				background-color: #f58094;
+			}
+			h1.cab-num{
+				font-size: 8rem;
+				position: absolute;
+				display: inline-block;
+				top: 6.5%;
+				left: 3%;
+			}
+	body
+		h3(id='brand-name') FUBER
+		hr
+		div(align='center')
+			if resp.noCabs
+				h4(id="no-cab") No Cabs Available
+			else
+				each cab in resp
+					div(class= cab.color === "pink" ? "pink-cab cab" : "cab")
+						h1(class='cab-num') #{cab.id}
+						h3(align='right') Cab
