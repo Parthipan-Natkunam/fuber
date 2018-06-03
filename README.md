@@ -4,6 +4,12 @@ A POC prototype code for Quintype Hiring Challenge
     <img src="/reameImg/html.jpg" alt="screenshot"/>	
 </p>
 
+## Ebd of Ride Console Log:
+<p align="center">
+    <img src="/reameImg/console.jpg" alt="console log" />
+</p>
+	
+
 ## Important Note:
 To successfully run the project, it is advised to use node version ```8.11.2``` or greater
 
@@ -17,7 +23,7 @@ To successfully run the project, it is advised to use node version ```8.11.2``` 
 The tests cases in the module assumes that all cabs are available at the start of the app. So it is advised to run this command first before running the app, if you are to run tests.<br/>
 ** Note: ** The API test Json file from Postman is in a folder within the tests folder
 
-3. To run start the server<br/>
+3. To start the server<br/>
 ```npm start```<br/>
 
 The testing and API interactions were done through postman with raw JSON type in the request body.
@@ -84,6 +90,35 @@ requests.
     ]
 }
 ```
+#### beginWait
+##### Request:
+```
+{
+	"id": 3
+}
+```
+
+##### Response:
+```
+{
+    "success": "Waiting time started"
+}
+```
+
+#### beginRide
+##### Request:
+```
+{
+	"id": 3
+}
+```
+
+##### Response
+```
+{
+    "success": "ride has begun"
+}
+```
 
 #### endRide
 ##### Request:
@@ -101,6 +136,9 @@ requests.
     "pinkFactor": 0
 }
 ```
+#### The root (/) API call to fetch all availble Cabs
+This is a ```GET``` type request
+The response for this request will be a server-side rendered HTML template showing available cabs with highlights for pink cabs.
 
 ### Assumptions made:
 1. The cab cannot be cancelled once it has started waiting for the client or the ride is started.
