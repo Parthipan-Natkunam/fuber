@@ -1,5 +1,5 @@
 # fuber
-A POC prototype code for Quintype Hiring Challenge
+A POC prototype code to simulate the RESTful APIs of an imaginary cab booking service
 <p align="center">
     <img src="/reameImg/html.jpg" alt="screenshot"/>	
 </p>
